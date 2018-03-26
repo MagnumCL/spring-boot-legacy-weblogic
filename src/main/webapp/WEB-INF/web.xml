@@ -5,11 +5,15 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>com.boostrdev.weblogic.legacy.SpringBootWebLogicLegacyApplication</param-value>
+        <param-value>classpath:applicationContext.xml,com.magnumresearch.aqumon.SpringBootWebLogicLegacyApplication</param-value>
     </context-param>
 
     <listener>
         <listener-class>org.springframework.boot.legacy.context.web.SpringBootContextLoaderListener</listener-class>
+
+    </listener>
+    <listener>
+        <listener-class>com.magnumresearch.aqumon.Init</listener-class>
     </listener>
 
     <filter>

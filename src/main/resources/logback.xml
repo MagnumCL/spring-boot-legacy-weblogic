@@ -1,5 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <configuration>
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <logger name="org.springframework.web" level="INFO"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/Users/charlc/mydomain/logs/test.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>/Users/charlc/mydomain/logs/test.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+    </appender>
+
+
+    <logger name="com.lordofthejars.foo" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <!-- Strictly speaking, the level attribute is not necessary since -->
+    <!-- the level of the root level is set to DEBUG by default.       -->
+    <root level="DEBUG">
+        <appender-ref ref="FILE" />
+    </root>
+
 </configuration>

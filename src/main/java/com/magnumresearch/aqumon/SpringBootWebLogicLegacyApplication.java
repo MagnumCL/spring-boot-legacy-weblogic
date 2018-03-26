@@ -1,5 +1,7 @@
-package com.boostrdev.weblogic.legacy;
+package com.magnumresearch.aqumon;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -18,13 +20,18 @@ import org.springframework.web.WebApplicationInitializer;
 @ComponentScan
 public class SpringBootWebLogicLegacyApplication extends SpringBootServletInitializer implements WebApplicationInitializer {
 
-	// Tell Spring to launch our app!
-	public static void main(String[] args) {
-		SpringApplication.run(SpringBootWebLogicLegacyApplication.class, args);
-	}
+    static Logger logger = LoggerFactory.getLogger(SpringBootWebLogicLegacyApplication.class);
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(SpringBootWebLogicLegacyApplication.class).showBanner(false);
-	}
+    // Tell Spring to launch our app!
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootWebLogicLegacyApplication.class, args);
+        logger.info("this is a test message");
+    }
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        logger.info("this is a test message in configure");
+
+        return builder.sources(SpringBootWebLogicLegacyApplication.class).showBanner(false);
+    }
 }

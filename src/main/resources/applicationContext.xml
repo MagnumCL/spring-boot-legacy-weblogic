@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:cache="http://www.springframework.org/schema/cache" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/jdbc
+    http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+    http://www.springframework.org/schema/cache
+    http://www.springframework.org/schema/cache/spring-cache-3.1.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util.xsd
+    http://www.springframework.org/schema/data/jpa
+    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <!-- 自动扫描web包 ,将带有注解的类 纳入spring容器管理 -->
+    <context:component-scan base-package="com.magnumresearch.aqumon"></context:component-scan>
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceXmlLocation" value="classpath*:META-INF/aqumon-persistence.xml" />
+        <property name="dataSource" ref="dataSource" />
+        <!--<property name="persistenceUnitName" value="aqumonPU" />-->
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="true" />
+                <property name="database" value="ORACLE" />
+            </bean>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- dataSource 配置 -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@10.241.95.135:1528:RBAD_DB"/>
+        <property name="username" value="rbaddb_user"/>
+        <property name="password" value="123456"/>
+    </bean>
+
+    <!-- 对dataSource 数据源进行事务管理 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" p:dataSource-ref="dataSource" />
+
+    <jpa:repositories base-package="com.magnumresearch.aqumon"  transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
+
+    <!-- 启用对事务注解的支持 -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <!-- Cache配置 -->
+    <!--<cache:annotation-driven/>-->
+
+</beans>
